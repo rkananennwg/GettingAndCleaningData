@@ -8,8 +8,11 @@ library(knitr)
 
 
 #set working directory to file location
-setwd("H:/datasciencecoursera/getdata-projectfiles-UCI HAR Dataset")
+setwd("H:/datasciencecoursera/UCI HAR Dataset")
+path_rf <- "H:/datasciencecoursera/UCI HAR Dataset"
 
+
+#Step 1 : Reading in Data Files
 
 dataActivityTest  <- read.table(file.path(path_rf, "test" , "Y_test.txt" ),header = FALSE)
 dataActivityTrain <- read.table(file.path(path_rf, "train", "Y_train.txt"),header = FALSE)
@@ -41,9 +44,11 @@ names(dataActivity)<- c("activity")
 dataFeaturesNames <- read.table(file.path(path_rf, "features.txt"),head=FALSE)
 names(dataFeatures)<- dataFeaturesNames$V2
 
+#combine data together
 dataCombine <- cbind(dataSubject, dataActivity)
 Data <- cbind(dataFeatures, dataCombine)
 
+#Want To Keep Mean and Std fields
 subdataFeaturesNames<-dataFeaturesNames$V2[grep("mean\\(\\)|std\\(\\)", dataFeaturesNames$V2)]
 
 selectedNames<-c(as.character(subdataFeaturesNames), "subject", "activity" )
@@ -71,7 +76,7 @@ Data2<-aggregate(. ~subject + activity, Data, mean)
 Data2<-Data2[order(Data2$subject,Data2$activity),]
 write.table(Data2, file = "tidydata.txt",row.name=FALSE)
 
-library(knitr)
+#library(knitr)
 knit2html("codebook.Rmd");
 
 
