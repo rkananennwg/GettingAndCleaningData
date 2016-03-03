@@ -1,1 +1,34 @@
-http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
+Code Book
+This document describes the code inside run_analysis.R.
+
+The code is splitted (by comments) in some sections:
+
+Some functions to avoid code repetition and make the rest of code more clean.
+
+fileJoin -> Used to build file paths, it concatenates strings using a slash as separator.
+
+extractUciHarFile ->Extract a file from the zipped UCI HAR file.
+
+uciHarDataFile-> Read dataset files from UCI HAR to given name and prefix. Know names are "train" and "test". Known prefixes are "X", "y" and "subject".
+
+Examples:
+UCI HAR Dataset/train/X_train.txt
+UCI HAR Dataset/train/y_train.txt
+UCI HAR Dataset/train/subject_train.txt
+loadUciHarData
+
+Loads data, labels and subjects from UCI HAR dataset to a data.frame. The returned data.frame contains a column Activity with labels integer codes, a column Subject with subjects integer codes and all other columns from data.
+
+Merges test data and trainning data to allData
+Indentifies the mean and std columns (plus Activity and Subject) to meanAndStdCols
+Extracts a new data.frames with only those columns from meanAndStdCols.
+Summarizes meanAndStdData calculating the average for each column for each activity/subject pair to meanAndStdAverages.
+At this point the final data frame meanAndStdAverages looks like this:
+
+> head(meanAndStdAverages[, 1:5], n=3)
+  Activity Subject tBodyAcc.mean...X tBodyAcc.mean...Y tBodyAcc.mean...Z
+1  WALKING       1         0.2773308       -0.01738382        -0.1111481
+
+Writing final data to txt file
+
+Creates the output dir if it doesn't exist and writes meanAndStdAverages data frame to the ouputfile.
